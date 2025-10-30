@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.5em;
+        }
+
+        .image-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .info {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .info p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .info strong {
+            color: #333;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .warning p {
+            color: #856404;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Gallery</h1>
+
+        <div class="image-wrapper">
+            <img src="IMG_5953.HEIC" alt="IMG_5953" id="mainImage">
+        </div>
+
+        <div class="info">
+            <p><strong>Filename:</strong> IMG_5953.HEIC</p>
+            <p><strong>Format:</strong> HEIC (High Efficiency Image Container)</p>
+        </div>
+
+        <div class="warning">
+            <p><strong>Note:</strong> HEIC images may not display in all web browsers. For best compatibility, consider converting this image to JPG or PNG format.</p>
+        </div>
+    </div>
+
+    <script>
+        // Check if image fails to load
+        const img = document.getElementById('mainImage');
+        img.onerror = function() {
+            this.style.display = 'none';
+            const wrapper = document.querySelector('.image-wrapper');
+            wrapper.innerHTML = '<p style="color: #dc3545; padding: 40px; text-align: center; font-size: 1.2em;">⚠️ Unable to display HEIC image in this browser. Please convert to JPG or PNG format.</p>';
+        };
+    </script>
+</body>
+</html>
