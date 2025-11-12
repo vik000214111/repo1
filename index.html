@@ -13,15 +13,47 @@
     <!-- Screen 1: Opening Scene -->
     <div id="opening-scene" class="screen active">
         <div class="corridor">
+            <!-- Floating orbs -->
+            <div class="floating-orbs"></div>
+
+            <!-- Interactive candles -->
+            <div class="candles-container">
+                <div class="candle left" data-pos="left">
+                    <div class="flame"></div>
+                </div>
+                <div class="candle right" data-pos="right">
+                    <div class="flame"></div>
+                </div>
+            </div>
+
+            <!-- Floating books -->
+            <div class="floating-books">
+                <div class="mini-book" style="--delay: 0s; --x: -200px; --y: -100px;">📕</div>
+                <div class="mini-book" style="--delay: 1s; --x: 200px; --y: -50px;">📗</div>
+                <div class="mini-book" style="--delay: 2s; --x: -150px; --y: 100px;">📙</div>
+                <div class="mini-book" style="--delay: 1.5s; --x: 180px; --y: 120px;">📔</div>
+            </div>
+
+            <!-- Main glowing book -->
             <div class="glowing-book">
                 <div class="book-glow"></div>
+                <div class="book-rays"></div>
                 <div class="book-icon">📖</div>
-                <p class="book-hint">Tap to enter</p>
+                <p class="book-hint">Click to enter the Archive</p>
+                <div class="ripple-effect"></div>
             </div>
+
+            <!-- Interactive hint text -->
+            <div class="hover-hint">Move your cursor to explore...</div>
         </div>
         <div class="title-overlay">
-            <h1>The Memory Archive</h1>
+            <h1 class="glitch-text" data-text="The Memory Archive">The Memory Archive</h1>
             <p class="subtitle">A story of forgotten memories</p>
+            <div class="subtitle-decorations">
+                <span class="deco">✦</span>
+                <span class="deco">✦</span>
+                <span class="deco">✦</span>
+            </div>
         </div>
     </div>
 
@@ -29,26 +61,54 @@
     <div id="choice-screen" class="screen">
         <div class="choice-container">
             <h2>Choose Your Path</h2>
+            <div class="path-preview">Hover over a path to preview...</div>
             <div class="choices">
                 <div class="choice-card" data-route="book">
+                    <div class="card-particles"></div>
+                    <div class="choice-glow"></div>
                     <div class="choice-icon">📘</div>
                     <h3>Follow the Breathing Diary</h3>
                     <p class="choice-hint">Uncover the library's hidden truth and ancient records</p>
                     <div class="choice-experience">Puzzle-solving · Layered storytelling</div>
+                    <div class="preview-animation book-preview">
+                        <div class="preview-page">
+                            <div class="preview-text"></div>
+                            <div class="preview-text"></div>
+                            <div class="preview-text"></div>
+                        </div>
+                    </div>
+                    <div class="interaction-hint">Click to begin</div>
                 </div>
 
                 <div class="choice-card" data-route="wall">
+                    <div class="card-particles"></div>
+                    <div class="choice-glow"></div>
                     <div class="choice-icon">🪶</div>
                     <h3>Listen to the Whispering Walls</h3>
                     <p class="choice-hint">Enter others' memories and relive forgotten stories</p>
                     <div class="choice-experience">Emotional immersion · Voice interaction</div>
+                    <div class="preview-animation wall-preview">
+                        <div class="preview-wave"></div>
+                        <div class="preview-wave"></div>
+                        <div class="preview-wave"></div>
+                        <div class="preview-echo">echo...</div>
+                    </div>
+                    <div class="interaction-hint">Click to begin</div>
                 </div>
 
                 <div class="choice-card" data-route="machine">
+                    <div class="card-particles"></div>
+                    <div class="choice-glow"></div>
                     <div class="choice-icon">⚙️</div>
                     <h3>Break the Machine</h3>
                     <p class="choice-hint">Rebel against the system and attempt to escape</p>
                     <div class="choice-experience">Tension · Countdown · Interface collapse</div>
+                    <div class="preview-animation machine-preview">
+                        <div class="preview-circuit"></div>
+                        <div class="preview-spark"></div>
+                        <div class="preview-countdown">100%</div>
+                    </div>
+                    <div class="interaction-hint">Click to begin</div>
                 </div>
             </div>
         </div>
@@ -58,29 +118,84 @@
     <div id="route-book" class="screen route-screen">
         <div class="book-interface">
             <div class="parchment-bg"></div>
+            <div class="page-curl"></div>
+            <div class="ink-drips"></div>
+
+            <!-- Magnifying glass that follows cursor -->
+            <div class="magnifying-glass"></div>
+
             <div class="page-container">
                 <div class="page active" data-page="1">
                     <h2>The First Entry</h2>
-                    <p class="breathing-text">I found myself in a place between memories...</p>
-                    <p class="breathing-text delay-1">The books here breathe. They whisper secrets of those who came before.</p>
-                    <p class="breathing-text delay-2 hidden-text">Hidden in the margins, I discovered a pattern—a cipher leading to the oldest section.</p>
-                    <div class="page-hint">▼ Swipe to continue</div>
+                    <p class="breathing-text">I found myself in a place between <span class="clickable-word" data-secret="memories">memories</span>...</p>
+                    <p class="breathing-text delay-1">The books here <span class="interactive-word pulse">breathe</span>. They whisper <span class="clickable-word" data-secret="secrets">secrets</span> of those who came before.</p>
+                    <p class="breathing-text delay-2 hidden-text">Hidden in the margins, I discovered a <span class="clickable-word cipher-word" data-secret="cipher">pattern</span>—a cipher leading to the oldest section.</p>
+
+                    <!-- Interactive annotations in margins -->
+                    <div class="annotation left-margin" data-note="1" style="top: 120px;">
+                        <span class="annotation-mark">※</span>
+                        <div class="annotation-popup">
+                            "The first visitor wrote this 200 years ago..."
+                        </div>
+                    </div>
+
+                    <div class="annotation right-margin" data-note="2" style="top: 200px;">
+                        <span class="annotation-mark">✎</span>
+                        <div class="annotation-popup">
+                            "This word glows in darkness"
+                        </div>
+                    </div>
+
+                    <div class="page-hint">▼ Swipe to continue · Click words to reveal secrets</div>
                 </div>
 
                 <div class="page" data-page="2">
                     <h2>The Ancient Records</h2>
-                    <p class="breathing-text">The oldest books are alive with purpose.</p>
-                    <p class="breathing-text delay-1">They remember everything—every visitor, every story, every ending.</p>
-                    <p class="breathing-text delay-2 hidden-text">I see names written in light. One of them... is mine.</p>
+                    <p class="breathing-text">The oldest books are <span class="interactive-word glow">alive</span> with purpose.</p>
+                    <p class="breathing-text delay-1">They <span class="clickable-word" data-secret="remember">remember</span> everything—every visitor, every story, every ending.</p>
+                    <p class="breathing-text delay-2 hidden-text">I see <span class="clickable-word glowing-text" data-secret="names">names</span> written in light. One of them... is <span class="clickable-word your-name" data-secret="mine">mine</span>.</p>
+
+                    <!-- Floating symbols -->
+                    <div class="floating-symbol" style="top: 150px; left: 50px;">☽</div>
+                    <div class="floating-symbol" style="top: 250px; right: 50px;">☾</div>
+
+                    <!-- Mini puzzle - connect the dots -->
+                    <div class="puzzle-overlay">
+                        <div class="puzzle-dot" style="top: 180px; left: 100px;" data-dot="1"></div>
+                        <div class="puzzle-dot" style="top: 180px; right: 100px;" data-dot="2"></div>
+                        <div class="puzzle-dot" style="bottom: 180px; left: 100px;" data-dot="3"></div>
+                        <svg class="puzzle-lines"></svg>
+                    </div>
+
+                    <div class="annotation left-margin" data-note="3" style="top: 150px;">
+                        <span class="annotation-mark">☆</span>
+                        <div class="annotation-popup">
+                            "Touch the stars to reveal the path"
+                        </div>
+                    </div>
+
                     <div class="page-hint">▼ Swipe to continue</div>
                 </div>
 
                 <div class="page" data-page="3">
                     <h2>The Truth Revealed</h2>
-                    <p class="breathing-text">I am not the first to seek the truth.</p>
-                    <p class="breathing-text delay-1">Every librarian before me discovered the same thing:</p>
-                    <p class="breathing-text delay-2">We were never meant to leave.</p>
-                    <p class="breathing-text delay-3 hidden-text">We ARE the archive.</p>
+                    <p class="breathing-text">I am not the <span class="interactive-word shake">first</span> to seek the truth.</p>
+                    <p class="breathing-text delay-1">Every <span class="clickable-word" data-secret="librarian">librarian</span> before me discovered the same thing:</p>
+                    <p class="breathing-text delay-2">We were <span class="interactive-word fade-in-out">never</span> meant to leave.</p>
+                    <p class="breathing-text delay-3 hidden-text dramatic">We <span class="dramatic-word">ARE</span> the archive.</p>
+
+                    <!-- Final revelation effect -->
+                    <div class="revelation-overlay">
+                        <div class="revelation-text">You are now part of the eternal collection</div>
+                    </div>
+
+                    <div class="annotation center-margin" data-note="4" style="bottom: 120px;">
+                        <span class="annotation-mark">✦</span>
+                        <div class="annotation-popup">
+                            "And so the cycle continues..."
+                        </div>
+                    </div>
+
                     <button class="route-end-btn">Accept Your Role</button>
                 </div>
             </div>
@@ -89,42 +204,119 @@
                 <span class="page-indicator"></span>
                 <button class="page-nav next">Next →</button>
             </div>
+
+            <!-- Secret counter -->
+            <div class="secrets-found">
+                Secrets Revealed: <span id="secret-count">0</span>/8
+            </div>
         </div>
     </div>
 
     <!-- Screen 4: Route B - The Wall -->
     <div id="route-wall" class="screen route-screen">
         <div class="wall-interface">
+            <!-- Enhanced audio visualizer -->
             <div class="soundwave-container">
                 <div class="soundwave"></div>
                 <div class="soundwave"></div>
                 <div class="soundwave"></div>
+                <div class="soundwave"></div>
+                <div class="soundwave"></div>
+                <div class="soundwave"></div>
+                <div class="soundwave"></div>
+            </div>
+
+            <!-- Floating memory fragments -->
+            <div class="memory-fragments">
+                <div class="fragment" style="--x: 10%; --y: 20%; --delay: 0s;">remember...</div>
+                <div class="fragment" style="--x: 80%; --y: 30%; --delay: 1s;">forgotten...</div>
+                <div class="fragment" style="--x: 20%; --y: 70%; --delay: 2s;">who am I?</div>
+                <div class="fragment" style="--x: 70%; --y: 80%; --delay: 1.5s;">echoes...</div>
+                <div class="fragment" style="--x: 50%; --y: 50%; --delay: 2.5s;">forever...</div>
+            </div>
+
+            <!-- Wall texture with faces -->
+            <div class="wall-texture">
+                <div class="wall-face" style="top: 15%; left: 5%;">👤</div>
+                <div class="wall-face" style="top: 25%; right: 8%;">👤</div>
+                <div class="wall-face" style="bottom: 30%; left: 10%;">👤</div>
+                <div class="wall-face" style="bottom: 20%; right: 15%;">👤</div>
             </div>
 
             <div class="memory-bubbles">
                 <div class="bubble" data-memory="1">
+                    <div class="bubble-pulse"></div>
+                    <div class="bubble-wave"></div>
                     <p>"I came here to forget... but the walls wouldn't let me."</p>
                     <span class="voice-label">— A Lost Soul</span>
+                    <div class="memory-icon">🕯️</div>
+                    <!-- Sub-memories that appear on click -->
+                    <div class="sub-memories">
+                        <div class="sub-memory" data-sub="1a">My name was...</div>
+                        <div class="sub-memory" data-sub="1b">I had a family once...</div>
+                    </div>
                 </div>
 
                 <div class="bubble" data-memory="2">
+                    <div class="bubble-pulse"></div>
+                    <div class="bubble-wave"></div>
                     <p>"Every word I speak becomes part of the walls. I can hear myself from years ago..."</p>
                     <span class="voice-label">— Echo of the Past</span>
+                    <div class="memory-icon">🌙</div>
+                    <div class="sub-memories">
+                        <div class="sub-memory" data-sub="2a">Hello? Can anyone hear me?</div>
+                        <div class="sub-memory" data-sub="2b">Is anyone still there?</div>
+                    </div>
                 </div>
 
                 <div class="bubble" data-memory="3">
+                    <div class="bubble-pulse"></div>
+                    <div class="bubble-wave"></div>
                     <p>"Who am I? I've lived so many lives through these memories..."</p>
                     <span class="voice-label">— You?</span>
+                    <div class="memory-icon">⭐</div>
+                    <div class="sub-memories">
+                        <div class="sub-memory" data-sub="3a">I remember everything and nothing...</div>
+                        <div class="sub-memory" data-sub="3b">Their memories are mine now...</div>
+                    </div>
                 </div>
 
                 <div class="bubble" data-memory="4">
+                    <div class="bubble-pulse"></div>
+                    <div class="bubble-wave"></div>
                     <p>"We are one now. All voices. All stories. Forever."</p>
                     <span class="voice-label">— The Chorus</span>
+                    <div class="memory-icon">✨</div>
+                    <div class="sub-memories">
+                        <div class="sub-memory" data-sub="4a">Join us...</div>
+                        <div class="sub-memory" data-sub="4b">Become part of the eternal song...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voice connection lines -->
+            <svg class="voice-connections" width="100%" height="100%">
+                <defs>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+            </svg>
+
+            <!-- Voice meter showing collective volume -->
+            <div class="voice-meter">
+                <div class="meter-label">Collective Voice Intensity</div>
+                <div class="meter-bar">
+                    <div class="meter-fill"></div>
                 </div>
             </div>
 
             <div class="wall-message">
-                <p>Tap the voices to hear their stories...</p>
+                <p>Click the voices to hear their stories... discover their hidden memories...</p>
             </div>
 
             <button class="route-end-btn" style="display: none;">Merge with the Memories</button>
@@ -135,10 +327,58 @@
     <div id="route-machine" class="screen route-screen">
         <div class="machine-interface">
             <div class="screen-glitch"></div>
+
+            <!-- Wire connections with sparks -->
+            <svg class="wire-network" width="100%" height="100%">
+                <line class="wire" x1="10%" y1="10%" x2="30%" y2="30%" />
+                <line class="wire" x1="90%" y1="10%" x2="70%" y2="30%" />
+                <line class="wire" x1="10%" y1="90%" x2="30%" y2="70%" />
+                <line class="wire" x1="90%" y1="90%" x2="70%" y2="70%" />
+                <line class="wire horizontal" x1="30%" y1="50%" x2="70%" y2="50%" />
+            </svg>
+
+            <!-- Electric sparks -->
+            <div class="sparks-container">
+                <div class="spark" style="top: 15%; left: 20%;"></div>
+                <div class="spark" style="top: 20%; right: 25%;"></div>
+                <div class="spark" style="bottom: 25%; left: 30%;"></div>
+                <div class="spark" style="bottom: 20%; right: 20%;"></div>
+            </div>
+
+            <!-- Warning lights -->
+            <div class="warning-lights">
+                <div class="warning-light" style="top: 20px; left: 20px;"></div>
+                <div class="warning-light" style="top: 20px; right: 20px;"></div>
+                <div class="warning-light" style="bottom: 100px; left: 20px;"></div>
+                <div class="warning-light" style="bottom: 100px; right: 20px;"></div>
+            </div>
+
             <div class="control-panel">
-                <div class="countdown-display">
-                    <div class="countdown-label">SYSTEM STABILITY</div>
-                    <div class="countdown-value">100%</div>
+                <!-- Multiple status displays -->
+                <div class="status-grid">
+                    <div class="status-display">
+                        <div class="status-label">CORE TEMPERATURE</div>
+                        <div class="status-value temp-value">NORMAL</div>
+                        <div class="status-bar">
+                            <div class="status-fill temp-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="status-display">
+                        <div class="status-label">MEMORY INTEGRITY</div>
+                        <div class="status-value integrity-value">100%</div>
+                        <div class="status-bar">
+                            <div class="status-fill integrity-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="status-display main-display">
+                        <div class="countdown-label">SYSTEM STABILITY</div>
+                        <div class="countdown-value">100%</div>
+                        <div class="stability-bar">
+                            <div class="stability-fill"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="terminal-output">
@@ -148,15 +388,56 @@
                 </div>
 
                 <div class="button-grid">
-                    <button class="control-btn" data-action="override">OVERRIDE PROTOCOL</button>
-                    <button class="control-btn" data-action="disable">DISABLE SAFEGUARDS</button>
-                    <button class="control-btn" data-action="corrupt">CORRUPT MEMORY BANK</button>
-                    <button class="control-btn dangerous" data-action="destroy">DESTROY ARCHIVE</button>
+                    <button class="control-btn" data-action="override" data-damage="15">
+                        <span class="btn-icon">⚡</span>
+                        <span class="btn-text">OVERRIDE PROTOCOL</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                    <button class="control-btn" data-action="disable" data-damage="20">
+                        <span class="btn-icon">🛡️</span>
+                        <span class="btn-text">DISABLE SAFEGUARDS</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                    <button class="control-btn" data-action="corrupt" data-damage="25">
+                        <span class="btn-icon">💾</span>
+                        <span class="btn-text">CORRUPT MEMORY BANK</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                    <button class="control-btn dangerous" data-action="destroy" data-damage="40">
+                        <span class="btn-icon">💥</span>
+                        <span class="btn-text">DESTROY ARCHIVE</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </div>
+
+                <!-- Additional mini controls -->
+                <div class="mini-controls">
+                    <div class="switch-group">
+                        <label class="switch-label">Emergency Override</label>
+                        <div class="switch">
+                            <input type="checkbox" id="emergency-switch">
+                            <span class="slider"></span>
+                        </div>
+                    </div>
+                    <div class="dial-group">
+                        <label class="dial-label">Power Level</label>
+                        <div class="dial">
+                            <div class="dial-indicator"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="system-messages">
                     <p>Choose carefully. Each action destabilizes the system further.</p>
+                    <div class="danger-zone">
+                        <span class="danger-icon">⚠️</span> DANGER ZONE <span class="danger-icon">⚠️</span>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Screen shake indicator -->
+            <div class="shake-intensity">
+                Screen Shake: <span class="shake-level">STABLE</span>
             </div>
 
             <button class="route-end-btn" style="display: none;">Escape / Destroy</button>

@@ -587,3 +587,583 @@ window.addEventListener('beforeunload', (e) => {
 
 console.log('The Memory Archive - Interactive Story Initialized');
 console.log('Created with love for storytelling and interactive fiction');
+
+// ==========================================
+// ENHANCED INTERACTIVE FEATURES - V2
+// ==========================================
+
+// Enhanced Game State
+Object.assign(gameState, {
+    secretsFound: 0,
+    totalSecrets: 8,
+    voiceIntensity: 0,
+    puzzleSolved: false,
+    mouseX: 0,
+    mouseY: 0,
+    coreTemp: 0,
+    memoryIntegrity: 100
+});
+
+// Initialize Enhanced Features
+function initializeEnhancedFeatures() {
+    initializeOpeningSceneEnhancements();
+    initializeChoiceScreenEnhancements();
+    initializeBookEnhancements();
+    initializeWallEnhancements();
+    initializeMachineEnhancements();
+}
+
+// Call enhanced features after DOM load
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        initializeEnhancedFeatures();
+    }, 100);
+});
+
+// ========== OPENING SCENE ENHANCEMENTS ==========
+
+function initializeOpeningSceneEnhancements() {
+    const corridor = document.querySelector('.corridor');
+    const glowingBook = document.querySelector('.glowing-book');
+    const hoverHint = document.querySelector('.hover-hint');
+    const miniBooks = document.querySelectorAll('.mini-book');
+    const candles = document.querySelectorAll('.candle');
+    
+    // Create floating orbs
+    createFloatingOrbs();
+    
+    // Mouse tracking for magnifying glass effect and parallax
+    if (corridor) {
+        corridor.addEventListener('mousemove', (e) => {
+            const rect = corridor.getBoundingClientRect();
+            gameState.mouseX = e.clientX - rect.left;
+            gameState.mouseY = e.clientY - rect.top;
+            
+            // Move mini books slightly with mouse (parallax)
+            miniBooks.forEach((book, index) => {
+                const speed = 0.02 + (index * 0.01);
+                const x = (gameState.mouseX - rect.width / 2) * speed;
+                const y = (gameState.mouseY - rect.height / 2) * speed;
+                book.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+    }
+    
+    // Glowing book click with ripple effect
+    if (glowingBook) {
+        glowingBook.addEventListener('click', (e) => {
+            const ripple = glowingBook.querySelector('.ripple-effect');
+            if (ripple) {
+                ripple.classList.remove('active');
+                void ripple.offsetWidth; // Trigger reflow
+                ripple.classList.add('active');
+            }
+        });
+    }
+    
+    // Interactive mini books
+    miniBooks.forEach(book => {
+        book.addEventListener('click', (e) => {
+            e.stopPropagation();
+            book.style.animation = 'none';
+            setTimeout(() => {
+                book.style.animation = '';
+            }, 10);
+            playSound('book-open');
+            
+            // Easter egg: click all mini books
+            book.dataset.clicked = 'true';
+            const allClicked = Array.from(miniBooks).every(b => b.dataset.clicked === 'true');
+            if (allClicked && hoverHint) {
+                hoverHint.textContent = '✨ You found the hidden books! ✨';
+                hoverHint.style.color = '#00ff00';
+            }
+        });
+    });
+    
+    // Interactive candles - blow them out with click
+    candles.forEach(candle => {
+        const flame = candle.querySelector('.flame');
+        candle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (flame) {
+                flame.style.animation = 'flame-extinguish 0.5s ease forwards';
+                setTimeout(() => {
+                    flame.style.display = 'none';
+                }, 500);
+                playSound('whisper');
+            }
+        });
+    });
+}
+
+function createFloatingOrbs() {
+    const orbsContainer = document.querySelector('.floating-orbs');
+    if (!orbsContainer) return;
+    
+    for (let i = 0; i < 10; i++) {
+        const orb = document.createElement('div');
+        orb.className = 'floating-orb';
+        orb.style.left = Math.random() * 100 + '%';
+        orb.style.top = Math.random() * 100 + '%';
+        orb.style.animationDelay = Math.random() * 8 + 's';
+        orb.style.animationDuration = (Math.random() * 5 + 8) + 's';
+        orbsContainer.appendChild(orb);
+    }
+}
+
+// ========== CHOICE SCREEN ENHANCEMENTS ==========
+
+function initializeChoiceScreenEnhancements() {
+    const choiceCards = document.querySelectorAll('.choice-card');
+    const pathPreview = document.querySelector('.path-preview');
+    
+    choiceCards.forEach(card => {
+        const cardParticles = card.querySelector('.card-particles');
+        
+        // Create card particles
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            cardParticles.appendChild(particle);
+        }
+        
+        // Enhanced hover effects
+        card.addEventListener('mouseenter', () => {
+            const route = card.dataset.route;
+            if (pathPreview) {
+                const previews = {
+                    book: '📖 Discover ancient secrets hidden in breathing pages...',
+                    wall: '🌊 Listen to echoes of forgotten souls...',
+                    machine: '⚡ Tear down the system from within...'
+                };
+                pathPreview.textContent = previews[route];
+                pathPreview.style.color = '#ffd764';
+            }
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            if (pathPreview) {
+                pathPreview.textContent = 'Hover over a path to preview...';
+                pathPreview.style.color = 'rgba(255, 215, 100, 0.6)';
+            }
+        });
+    });
+}
+
+// ========== BOOK ROUTE ENHANCEMENTS ==========
+
+function initializeBookEnhancements() {
+    initializeClickableWords();
+    initializeAnnotations();
+    initializeMagnifyingGlass();
+    initializePuzzle();
+    updateSecretCounter();
+}
+
+function initializeClickableWords() {
+    const clickableWords = document.querySelectorAll('.clickable-word');
+    
+    clickableWords.forEach(word => {
+        word.addEventListener('click', () => {
+            if (!word.classList.contains('revealed')) {
+                word.classList.add('revealed');
+                gameState.secretsFound++;
+                updateSecretCounter();
+                playSound('choice-select');
+                
+                // Show secret tooltip
+                const secret = word.dataset.secret;
+                showSecretTooltip(word, `Secret revealed: "${secret}"`);
+            }
+        });
+    });
+}
+
+function initializeAnnotations() {
+    const annotations = document.querySelectorAll('.annotation');
+    
+    annotations.forEach(annotation => {
+        annotation.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const popup = annotation.querySelector('.annotation-popup');
+            if (popup) {
+                popup.style.opacity = '1';
+                popup.style.visibility = 'visible';
+                setTimeout(() => {
+                    popup.style.opacity = '0';
+                    popup.style.visibility = 'hidden';
+                }, 3000);
+            }
+            playSound('whisper');
+        });
+    });
+}
+
+function initializeMagnifyingGlass() {
+    const bookInterface = document.querySelector('.book-interface');
+    const magnifyingGlass = document.querySelector('.magnifying-glass');
+    
+    if (bookInterface && magnifyingGlass) {
+        bookInterface.addEventListener('mousemove', (e) => {
+            const rect = bookInterface.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            magnifyingGlass.style.left = (x - 40) + 'px';
+            magnifyingGlass.style.top = (y - 40) + 'px';
+        });
+        
+        bookInterface.addEventListener('mouseenter', () => {
+            magnifyingGlass.style.opacity = '0.6';
+        });
+        
+        bookInterface.addEventListener('mouseleave', () => {
+            magnifyingGlass.style.opacity = '0';
+        });
+    }
+}
+
+function initializePuzzle() {
+    const puzzleDots = document.querySelectorAll('.puzzle-dot');
+    const puzzleLines = document.querySelector('.puzzle-lines');
+    let selectedDots = [];
+    
+    puzzleDots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            if (!gameState.puzzleSolved) {
+                dot.classList.add('connected');
+                selectedDots.push(dot);
+                
+                if (selectedDots.length > 1) {
+                    drawPuzzleLine(selectedDots[selectedDots.length - 2], dot, puzzleLines);
+                }
+                
+                if (selectedDots.length === puzzleDots.length) {
+                    gameState.puzzleSolved = true;
+                    gameState.secretsFound++;
+                    updateSecretCounter();
+                    showSecretTooltip(puzzleLines, '✨ Puzzle solved! Hidden path revealed!');
+                }
+                
+                playSound('choice-select');
+            }
+        });
+    });
+}
+
+function drawPuzzleLine(dot1, dot2, svg) {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    const rect = svg.getBoundingClientRect();
+    const rect1 = dot1.getBoundingClientRect();
+    const rect2 = dot2.getBoundingClientRect();
+    
+    const x1 = rect1.left - rect.left + rect1.width / 2;
+    const y1 = rect1.top - rect.top + rect1.height / 2;
+    const x2 = rect2.left - rect.left + rect2.width / 2;
+    const y2 = rect2.top - rect.top + rect2.height / 2;
+    
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    line.setAttribute('class', 'puzzle-line');
+    line.setAttribute('stroke-dasharray', '1000');
+    line.setAttribute('stroke-dashoffset', '1000');
+    
+    svg.appendChild(line);
+}
+
+function updateSecretCounter() {
+    const secretCount = document.getElementById('secret-count');
+    if (secretCount) {
+        secretCount.textContent = gameState.secretsFound;
+        if (gameState.secretsFound === gameState.totalSecrets) {
+            secretCount.parentElement.style.background = 'rgba(0, 255, 0, 0.2)';
+            secretCount.parentElement.style.borderColor = '#00ff00';
+        }
+    }
+}
+
+function showSecretTooltip(element, message) {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'secret-tooltip';
+    tooltip.textContent = message;
+    tooltip.style.cssText = `
+        position: absolute;
+        background: rgba(0, 255, 0, 0.9);
+        color: #000;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        z-index: 1000;
+        pointer-events: none;
+        animation: tooltip-appear 2s ease forwards;
+    `;
+    
+    const rect = element.getBoundingClientRect();
+    tooltip.style.left = (rect.left + rect.width / 2) + 'px';
+    tooltip.style.top = (rect.top - 40) + 'px';
+    tooltip.style.transform = 'translateX(-50%)';
+    
+    document.body.appendChild(tooltip);
+    
+    setTimeout(() => {
+        tooltip.remove();
+    }, 2000);
+}
+
+// ========== WALL ROUTE ENHANCEMENTS ==========
+
+function initializeWallEnhancements() {
+    const bubbles = document.querySelectorAll('.bubble');
+    const voiceMeter = document.querySelector('.meter-fill');
+    const voiceConnections = document.querySelector('.voice-connections');
+    
+    bubbles.forEach((bubble, index) => {
+        bubble.addEventListener('click', () => {
+            if (!bubble.classList.contains('activated')) {
+                bubble.classList.add('activated');
+                gameState.memoriesActivated++;
+                gameState.voiceIntensity += 25;
+                
+                // Update voice meter
+                if (voiceMeter) {
+                    voiceMeter.style.width = gameState.voiceIntensity + '%';
+                }
+                
+                // Draw connection lines
+                if (voiceConnections && index > 0) {
+                    const prevBubble = bubbles[index - 1];
+                    drawVoiceConnection(prevBubble, bubble, voiceConnections);
+                }
+                
+                // Activate sub-memories
+                setTimeout(() => {
+                    const subMemories = bubble.querySelectorAll('.sub-memory');
+                    subMemories.forEach(sub => {
+                        sub.style.animation = 'sub-memory-appear 0.5s ease forwards';
+                    });
+                }, 500);
+                
+                playSound('whisper');
+            }
+        });
+    });
+    
+    // Animate soundwaves
+    animateSoundwaves();
+}
+
+function drawVoiceConnection(bubble1, bubble2, svg) {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    const svgRect = svg.getBoundingClientRect();
+    const rect1 = bubble1.getBoundingClientRect();
+    const rect2 = bubble2.getBoundingClientRect();
+    
+    const x1 = rect1.left - svgRect.left + rect1.width / 2;
+    const y1 = rect1.top - svgRect.top + rect1.height / 2;
+    const x2 = rect2.left - svgRect.left + rect2.width / 2;
+    const y2 = rect2.top - svgRect.top + rect2.height / 2;
+    
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    line.setAttribute('class', 'voice-line');
+    line.setAttribute('filter', 'url(#glow)');
+    
+    svg.appendChild(line);
+}
+
+function animateSoundwaves() {
+    const soundwaves = document.querySelectorAll('.soundwave');
+    soundwaves.forEach((wave, index) => {
+        wave.style.animationDelay = (index * 0.15) + 's';
+    });
+}
+
+// ========== MACHINE ROUTE ENHANCEMENTS ==========
+
+function initializeMachineEnhancements() {
+    const emergencySwitch = document.getElementById('emergency-switch');
+    const dial = document.querySelector('.dial');
+    const controlButtons = document.querySelectorAll('.control-btn');
+    
+    // Emergency switch
+    if (emergencySwitch) {
+        emergencySwitch.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                addTerminalLine('> EMERGENCY OVERRIDE ACTIVATED', 'terminal-line warning');
+                gameState.coreTemp += 20;
+                updateMachineStatus();
+                playSound('machine-beep');
+            }
+        });
+    }
+    
+    // Power dial
+    if (dial) {
+        let rotation = 0;
+        dial.addEventListener('click', () => {
+            rotation += 45;
+            if (rotation > 180) rotation = 0;
+            const indicator = dial.querySelector('.dial-indicator');
+            if (indicator) {
+                indicator.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+            }
+            gameState.coreTemp = rotation / 2;
+            updateMachineStatus();
+            playSound('machine-beep');
+        });
+    }
+    
+    // Enhanced control buttons with visual feedback
+    controlButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Trigger button glow effect
+            const glow = button.querySelector('.btn-glow');
+            if (glow) {
+                glow.style.width = '200%';
+                glow.style.height = '200%';
+                setTimeout(() => {
+                    glow.style.width = '0';
+                    glow.style.height = '0';
+                }, 500);
+            }
+            
+            // Trigger sparks
+            triggerSparks();
+            
+            // Update machine status
+            updateMachineStatus();
+        });
+    });
+    
+    // Activate warning lights and wires
+    animateWarningLights();
+    animateWires();
+}
+
+function updateMachineStatus() {
+    const tempValue = document.querySelector('.temp-value');
+    const tempFill = document.querySelector('.temp-fill');
+    const integrityValue = document.querySelector('.integrity-value');
+    const integrityFill = document.querySelector('.integrity-fill');
+    const shakeLevel = document.querySelector('.shake-level');
+    const machineInterface = document.querySelector('.machine-interface');
+    
+    // Update temperature
+    if (tempValue && tempFill) {
+        const temp = gameState.coreTemp;
+        if (temp < 50) {
+            tempValue.textContent = 'NORMAL';
+            tempFill.style.width = temp + '%';
+            tempFill.classList.remove('warning', 'critical');
+        } else if (temp < 80) {
+            tempValue.textContent = 'WARNING';
+            tempFill.style.width = temp + '%';
+            tempFill.classList.add('warning');
+            tempFill.classList.remove('critical');
+        } else {
+            tempValue.textContent = 'CRITICAL';
+            tempFill.style.width = '100%';
+            tempFill.classList.add('critical');
+        }
+    }
+    
+    // Update memory integrity
+    const integrity = Math.max(0, gameState.memoryIntegrity - (100 - gameState.machineStability));
+    if (integrityValue && integrityFill) {
+        integrityValue.textContent = integrity + '%';
+        integrityFill.style.width = integrity + '%';
+        
+        if (integrity < 50) {
+            integrityFill.classList.add('degraded');
+        }
+        if (integrity < 30) {
+            integrityFill.classList.add('critical');
+        }
+    }
+    
+    // Update screen shake
+    if (shakeLevel && machineInterface) {
+        machineInterface.classList.remove('shake-light', 'shake-medium', 'shake-heavy');
+        
+        if (gameState.machineStability > 50) {
+            shakeLevel.textContent = 'STABLE';
+            shakeLevel.classList.remove('warning', 'critical');
+        } else if (gameState.machineStability > 25) {
+            shakeLevel.textContent = 'UNSTABLE';
+            shakeLevel.classList.add('warning');
+            shakeLevel.classList.remove('critical');
+            machineInterface.classList.add('shake-light');
+        } else if (gameState.machineStability > 0) {
+            shakeLevel.textContent = 'FAILING';
+            shakeLevel.classList.add('critical');
+            machineInterface.classList.add('shake-medium');
+        } else {
+            shakeLevel.textContent = 'DESTROYED';
+            shakeLevel.classList.add('critical');
+            machineInterface.classList.add('shake-heavy');
+        }
+    }
+}
+
+function triggerSparks() {
+    const sparks = document.querySelectorAll('.spark');
+    sparks.forEach(spark => {
+        spark.style.animation = 'none';
+        setTimeout(() => {
+            spark.style.animation = 'spark-fly 2s infinite';
+        }, 10);
+    });
+}
+
+function animateWarningLights() {
+    const lights = document.querySelectorAll('.warning-light');
+    lights.forEach((light, index) => {
+        setTimeout(() => {
+            light.style.animation = 'warning-blink 1s infinite';
+        }, index * 250);
+    });
+}
+
+function animateWires() {
+    const wires = document.querySelectorAll('.wire');
+    wires.forEach((wire, index) => {
+        wire.style.animationDelay = (index * 0.3) + 's';
+    });
+}
+
+// ========== ADDITIONAL ANIMATIONS ==========
+
+// Add CSS animation for tooltips
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes tooltip-appear {
+        0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+        10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    }
+    
+    @keyframes flame-extinguish {
+        to {
+            transform: translateX(-50%) scaleY(0);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+console.log('Enhanced Interactive Features Loaded! 🎮');
+console.log('- Opening Scene: Floating orbs, interactive candles, mini-books');
+console.log('- Choice Screen: Live previews, particle effects');
+console.log('- Book Route: ' + gameState.totalSecrets + ' secrets to find, puzzles, annotations');
+console.log('- Wall Route: Voice connections, sub-memories, intensity meter');
+console.log('- Machine Route: Multiple status bars, switches, dials, screen shake');
+
