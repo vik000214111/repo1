@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Memory Archive</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Particle system for ambient effect -->
+    <div id="particles"></div>
+
+    <!-- Screen 1: Opening Scene -->
+    <div id="opening-scene" class="screen active">
+        <div class="corridor">
+            <div class="glowing-book">
+                <div class="book-glow"></div>
+                <div class="book-icon">📖</div>
+                <p class="book-hint">Tap to enter</p>
+            </div>
+        </div>
+        <div class="title-overlay">
+            <h1>The Memory Archive</h1>
+            <p class="subtitle">A story of forgotten memories</p>
+        </div>
+    </div>
+
+    <!-- Screen 2: Choice Screen -->
+    <div id="choice-screen" class="screen">
+        <div class="choice-container">
+            <h2>Choose Your Path</h2>
+            <div class="choices">
+                <div class="choice-card" data-route="book">
+                    <div class="choice-icon">📘</div>
+                    <h3>Follow the Breathing Diary</h3>
+                    <p class="choice-hint">Uncover the library's hidden truth and ancient records</p>
+                    <div class="choice-experience">Puzzle-solving · Layered storytelling</div>
+                </div>
+
+                <div class="choice-card" data-route="wall">
+                    <div class="choice-icon">🪶</div>
+                    <h3>Listen to the Whispering Walls</h3>
+                    <p class="choice-hint">Enter others' memories and relive forgotten stories</p>
+                    <div class="choice-experience">Emotional immersion · Voice interaction</div>
+                </div>
+
+                <div class="choice-card" data-route="machine">
+                    <div class="choice-icon">⚙️</div>
+                    <h3>Break the Machine</h3>
+                    <p class="choice-hint">Rebel against the system and attempt to escape</p>
+                    <div class="choice-experience">Tension · Countdown · Interface collapse</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 3: Route A - The Book -->
+    <div id="route-book" class="screen route-screen">
+        <div class="book-interface">
+            <div class="parchment-bg"></div>
+            <div class="page-container">
+                <div class="page active" data-page="1">
+                    <h2>The First Entry</h2>
+                    <p class="breathing-text">I found myself in a place between memories...</p>
+                    <p class="breathing-text delay-1">The books here breathe. They whisper secrets of those who came before.</p>
+                    <p class="breathing-text delay-2 hidden-text">Hidden in the margins, I discovered a pattern—a cipher leading to the oldest section.</p>
+                    <div class="page-hint">▼ Swipe to continue</div>
+                </div>
+
+                <div class="page" data-page="2">
+                    <h2>The Ancient Records</h2>
+                    <p class="breathing-text">The oldest books are alive with purpose.</p>
+                    <p class="breathing-text delay-1">They remember everything—every visitor, every story, every ending.</p>
+                    <p class="breathing-text delay-2 hidden-text">I see names written in light. One of them... is mine.</p>
+                    <div class="page-hint">▼ Swipe to continue</div>
+                </div>
+
+                <div class="page" data-page="3">
+                    <h2>The Truth Revealed</h2>
+                    <p class="breathing-text">I am not the first to seek the truth.</p>
+                    <p class="breathing-text delay-1">Every librarian before me discovered the same thing:</p>
+                    <p class="breathing-text delay-2">We were never meant to leave.</p>
+                    <p class="breathing-text delay-3 hidden-text">We ARE the archive.</p>
+                    <button class="route-end-btn">Accept Your Role</button>
+                </div>
+            </div>
+            <div class="page-controls">
+                <button class="page-nav prev">← Previous</button>
+                <span class="page-indicator"></span>
+                <button class="page-nav next">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 4: Route B - The Wall -->
+    <div id="route-wall" class="screen route-screen">
+        <div class="wall-interface">
+            <div class="soundwave-container">
+                <div class="soundwave"></div>
+                <div class="soundwave"></div>
+                <div class="soundwave"></div>
+            </div>
+
+            <div class="memory-bubbles">
+                <div class="bubble" data-memory="1">
+                    <p>"I came here to forget... but the walls wouldn't let me."</p>
+                    <span class="voice-label">— A Lost Soul</span>
+                </div>
+
+                <div class="bubble" data-memory="2">
+                    <p>"Every word I speak becomes part of the walls. I can hear myself from years ago..."</p>
+                    <span class="voice-label">— Echo of the Past</span>
+                </div>
+
+                <div class="bubble" data-memory="3">
+                    <p>"Who am I? I've lived so many lives through these memories..."</p>
+                    <span class="voice-label">— You?</span>
+                </div>
+
+                <div class="bubble" data-memory="4">
+                    <p>"We are one now. All voices. All stories. Forever."</p>
+                    <span class="voice-label">— The Chorus</span>
+                </div>
+            </div>
+
+            <div class="wall-message">
+                <p>Tap the voices to hear their stories...</p>
+            </div>
+
+            <button class="route-end-btn" style="display: none;">Merge with the Memories</button>
+        </div>
+    </div>
+
+    <!-- Screen 5: Route C - The Machine -->
+    <div id="route-machine" class="screen route-screen">
+        <div class="machine-interface">
+            <div class="screen-glitch"></div>
+            <div class="control-panel">
+                <div class="countdown-display">
+                    <div class="countdown-label">SYSTEM STABILITY</div>
+                    <div class="countdown-value">100%</div>
+                </div>
+
+                <div class="terminal-output">
+                    <p class="terminal-line">&gt; ACCESS GRANTED</p>
+                    <p class="terminal-line">&gt; SEARCHING FOR EXIT...</p>
+                    <p class="terminal-line warning">&gt; WARNING: UNAUTHORIZED ACTION DETECTED</p>
+                </div>
+
+                <div class="button-grid">
+                    <button class="control-btn" data-action="override">OVERRIDE PROTOCOL</button>
+                    <button class="control-btn" data-action="disable">DISABLE SAFEGUARDS</button>
+                    <button class="control-btn" data-action="corrupt">CORRUPT MEMORY BANK</button>
+                    <button class="control-btn dangerous" data-action="destroy">DESTROY ARCHIVE</button>
+                </div>
+
+                <div class="system-messages">
+                    <p>Choose carefully. Each action destabilizes the system further.</p>
+                </div>
+            </div>
+
+            <button class="route-end-btn" style="display: none;">Escape / Destroy</button>
+        </div>
+    </div>
+
+    <!-- Screen 6: Ending Screen -->
+    <div id="ending-screen" class="screen">
+        <div class="ending-container">
+            <div class="archive-card">
+                <div class="card-header">
+                    <h2 id="ending-title">Your Journey Ends</h2>
+                </div>
+                <div class="card-body">
+                    <div class="ending-icon"></div>
+                    <p id="ending-description"></p>
+                    <div class="path-summary">
+                        <h3>Your Path:</h3>
+                        <p id="path-name"></p>
+                    </div>
+                    <div class="ending-type">
+                        <span id="ending-type-label"></span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button id="replay-btn">Begin Another Journey</button>
+                    <button id="archives-btn">View All Paths</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Archive Modal -->
+    <div id="archives-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>The Memory Archive</h2>
+            <div class="archive-paths">
+                <div class="archive-path" data-unlocked="false">
+                    <div class="path-icon">📘</div>
+                    <h3>The Librarian</h3>
+                    <p>Keeper of all memories</p>
+                </div>
+                <div class="archive-path" data-unlocked="false">
+                    <div class="path-icon">🪶</div>
+                    <h3>The Chorus</h3>
+                    <p>Merged with countless voices</p>
+                </div>
+                <div class="archive-path" data-unlocked="false">
+                    <div class="path-icon">⚙️</div>
+                    <h3>The Rebel</h3>
+                    <p>Escaped or destroyed the world</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
