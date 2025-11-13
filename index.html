@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Book</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .magic-book {
+            max-width: 400px;
+            width: 90%;
+            cursor: pointer;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .magic-book:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .magic-book:active {
+            transform: scale(0.95);
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            font-size: 30px;
+            animation: sparkle-animation 1s ease-out forwards;
+        }
+
+        @keyframes sparkle-animation {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(var(--tx), var(--ty)) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 2.5em;
+        }
+
+        .instruction {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 20px;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ The Magic Book ✨</h1>
+        <img src="magic-book.png" alt="Magic Book" class="magic-book" id="magicBook">
+        <p class="instruction">Click the book to hear the magic!</p>
+    </div>
+
+    <script>
+        const magicBook = document.getElementById('magicBook');
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playMagicalSound() {
+            const now = audioContext.currentTime;
+
+            // Create multiple oscillators for a rich magical sound
+            const oscillators = [];
+            const gains = [];
+
+            // Magical frequencies (like a fairy tale chime)
+            const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+
+            frequencies.forEach((freq, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(freq, now);
+
+                // Create a shimmering effect
+                gainNode.gain.setValueAtTime(0, now);
+                gainNode.gain.linearRampToValueAtTime(0.2, now + 0.05 + index * 0.05);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 1.5);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.start(now + index * 0.05);
+                oscillator.stop(now + 1.5);
+
+                oscillators.push(oscillator);
+                gains.push(gainNode);
+            });
+
+            // Add a bell-like tone
+            const bellOsc = audioContext.createOscillator();
+            const bellGain = audioContext.createGain();
+
+            bellOsc.type = 'triangle';
+            bellOsc.frequency.setValueAtTime(2093, now); // C7
+
+            bellGain.gain.setValueAtTime(0, now);
+            bellGain.gain.linearRampToValueAtTime(0.15, now + 0.01);
+            bellGain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+
+            bellOsc.connect(bellGain);
+            bellGain.connect(audioContext.destination);
+
+            bellOsc.start(now);
+            bellOsc.stop(now + 0.8);
+        }
+
+        function createSparkles(event) {
+            const sparkleChars = ['✨', '⭐', '💫', '🌟'];
+            const numSparkles = 8;
+
+            for (let i = 0; i < numSparkles; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.textContent = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
+
+                const angle = (Math.PI * 2 * i) / numSparkles;
+                const distance = 100;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+
+                sparkle.style.left = event.clientX + 'px';
+                sparkle.style.top = event.clientY + 'px';
+                sparkle.style.setProperty('--tx', tx + 'px');
+                sparkle.style.setProperty('--ty', ty + 'px');
+
+                document.body.appendChild(sparkle);
+
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 1000);
+            }
+        }
+
+        magicBook.addEventListener('click', function(event) {
+            // Resume audio context if it's suspended (browser autoplay policy)
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            playMagicalSound();
+            createSparkles(event);
+        });
+    </script>
+</body>
+</html>
